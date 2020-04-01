@@ -1,0 +1,43 @@
+{
+    "title": "Schema for the .acenorc file.",
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+        "wd": {
+            "description": "The working directory to use relative to the `process.cwd()`.",
+            "default": "",
+            "type": "string"
+        },
+        "extend": {
+            "description": "Relative directories to extend configurations from (should not include the `.acenorc` part).",
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "env": {
+            "description": "Assign `process.env` variables using relative `.env` files or specific definitions.",
+            "type": "array",
+            "items": {
+                "description": "Assign `process.env` variables using a relative `.env` file.",
+                "type": "string"
+            }
+        },
+        "tsconfig": {
+            "description": "The location of the `tsconfig.json` relative to the `cwd`.",
+            "type": "string",
+            "default": "./tsconfig.json"
+        },
+        "id": {
+            "description": "The identifier to use for the instance, e.g. for identifying builds.",
+            "type": "string",
+            "default": ""
+        },
+        "dev": {
+            "description": "Whether the `NODE_ENV` should be set to `\"development\"`.",
+            "type": "boolean",
+            "default": false
+        }
+    }
+}
