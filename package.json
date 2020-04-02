@@ -18,8 +18,18 @@
 	"main": "index.js",
 	"typings": "index.d.ts",
 	"files": [
-		"dist"
+		"_scripts",
+		"bin",
+		"cli",
+		"env",
+		"file",
+		"options",
+		"util",
+		"aceno"
 	],
+	"bin": {
+		"aceno": "./bin/aceno"
+	},
 	"scripts": {
 		"aceno": "ts-node -r tsconfig-paths/register ./src/bin/aceno.ts",
 		"lol_L": "aceno lol",
