@@ -17,19 +17,6 @@
 	],
 	"main": "index.js",
 	"typings": "index.d.ts",
-	"files": [
-		"_scripts",
-		"bin",
-		"cli",
-		"env",
-		"file",
-		"options",
-		"util",
-		"./index.d.ts",
-		"./index.js",
-		"./aceno.d.ts",
-		"./aceno.js"
-	],
 	"bin": {
 		"aceno": "./bin/aceno.js"
 	},
