@@ -1,7 +1,7 @@
 {
 	"name": "aceno",
 	"description": "Complex state in React made simple 🚀",
-	"version": "0.0.1-canary.3",
+	"version": "0.0.1-canary.4",
 	"license": "MIT",
 	"author": "Ludvig Aldén <ludvig@tifum.com>",
 	"repository": "ludvigalden/aceno",
