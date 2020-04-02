@@ -16,7 +16,12 @@ export async function setOptionsFromFile(props: OptionsFromFileProps) {
 
     loaded.push(cwd);
 
-    const filePath = await resolveOptionsFilePath(cwd);
+    const filePath = await resolveOptionsFilePath(cwd).catch(() => undefined);
+
+    if (!filePath) {
+        return;
+    }
+
     const fileExtension = path.extname(filePath);
 
     let found: AcenoRC | undefined;

@@ -1,29 +1,50 @@
+import { basename, dirname, resolve } from "path";
+
 import { spawnScript } from "../util";
 import { Cli } from "../cli";
-import { Package } from "../file";
 import { Options } from "../options";
+import { Package } from "../file";
 
-const run = Cli.script(async function run() {
+export default Cli.script(async function run() {
     Cli.register("run")
-        .description("Run a script from the package.json")
+        .description("Run a script or execute a file")
         .usage("aceno run <script>");
 
-    const script = Cli.argv[0];
+    const path = Cli.argv[0];
 
-    if (Cli.result["--help"] || !script) {
+    if (Cli.result["--help"] || !path) {
         return Cli.printHelp();
     }
 
-    const packageFile = Package.current;
+    let foundFile: string | undefined;
 
-    if (packageFile && packageFile.scripts && packageFile.scripts[script]) {
-        console.info(`> Running "${script}" for "${packageFile.name}"`);
+    try {
+        foundFile = require.resolve(resolve(Options.cwd, path));
+    } catch (error) {
+        try {
+            foundFile = require.resolve(path);
+        } catch (error) {}
+    }
 
-        await spawnScript(packageFile.scripts[script], {
+    if (foundFile) {
+        console.info(`> Executing "${basename(foundFile)}" in "${dirname(foundFile)}"`);
+
+        return import(foundFile);
+    }
+
+    const packageFile = await Package.promise.then(() => Package.current);
+
+    if (packageFile && packageFile.scripts && packageFile.scripts[path]) {
+        console.info(`> Running "${path}" for "${packageFile.name}"`);
+
+        await spawnScript(packageFile.scripts[path], {
+            inherit: true,
+            cwd: Options.cwd,
+        });
+    } else {
+        await spawnScript(Cli.argv.join(" "), {
             inherit: true,
             cwd: Options.cwd,
         });
     }
 });
-
-export default run;

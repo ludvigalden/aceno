@@ -35,6 +35,7 @@ export async function aceno() {
     const script = scriptMap.get(scriptName);
 
     if (!scriptName || !script) {
+        console.info(`\nNot found: "aceno ${scriptName}"`);
         return Cli.printHelp();
     }
 

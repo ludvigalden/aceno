@@ -2,9 +2,9 @@ import path from "path";
 
 import fs from "fs-extra";
 import findUp from "find-up";
-import merge from "lodash-es/merge";
-import omit from "lodash-es/omit";
-import assign from "lodash-es/assign";
+import merge from "lodash/merge";
+import omit from "lodash/omit";
+import assign from "lodash/assign";
 
 import { printAndExit } from "../util";
 

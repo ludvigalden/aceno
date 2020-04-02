@@ -1,6 +1,6 @@
 import arg from "arg";
-import isEqual from "lodash-es/isEqual";
-import merge from "lodash-es/merge";
+import isEqual from "lodash/isEqual";
+import merge from "lodash/merge";
 
 import { printAndExit } from "../util";
 
@@ -177,11 +177,9 @@ class Cli {
             }
         }
 
-        if (!cliScript) {
-            throw new Error(`Could not spawn script: ${script}`);
+        if (typeof cliScript === "function") {
+            return cliScript();
         }
-
-        return cliScript();
     }
 
     printHelp(): void {
@@ -261,7 +259,7 @@ class Cli {
             );
         }
 
-        return printAndExit("\n" + blocks.join("\n\n") + "\n", this.result["--help"] ? 0 : 1);
+        return printAndExit("\n" + blocks.join("\n\n") + "\n", 0);
     }
 
     script(script: Script) {

@@ -32,7 +32,7 @@
 		"pretty": true,
 		"lib": [
 			"esnext"
-		],
+		]
 	},
 	"include": [
 		"src",

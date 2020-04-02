@@ -12,26 +12,48 @@ interface SpawnOptions extends ExecaOptions {
 const ACENO = "aceno";
 
 export async function spawnScript(script: string, options: SpawnOptions = {}) {
+    if (script.includes("&&")) {
+        return Promise.resolve().then(async () => {
+            const scripts = script.split("&&");
+            let i = 0;
+
+            while (i <= scripts.length - 1) {
+                if (scripts[i].charAt(0) === " ") {
+                    scripts[i] = scripts[i].slice(1);
+                }
+
+                await spawnScript(scripts[i], options);
+
+                i++;
+            }
+        });
+    }
+
     const scriptArgv = script.split(" ");
 
-    if (scriptArgv.includes(ACENO) || scriptArgv.find((_argv) => _argv.includes(ACENO + ".ts") || _argv.includes(ACENO + ".js"))) {
-        const spawnedTifumArgv: string[] = [];
-        let foundTifumFileEnd = false;
+    if (
+        scriptArgv.includes(ACENO) ||
+        scriptArgv.includes("node") ||
+        scriptArgv.includes("ts-node") ||
+        scriptArgv.find((_argv) => _argv.includes(ACENO + ".ts") || _argv.includes(ACENO + ".js"))
+    ) {
+        const spawnedAcenoArgv: string[] = [];
+        let foundAcenoFileEnd = false;
 
-        while (!foundTifumFileEnd && process.argv.length > spawnedTifumArgv.length) {
-            const arg = process.argv[spawnedTifumArgv.length];
+        while (!foundAcenoFileEnd && process.argv.length > spawnedAcenoArgv.length) {
+            const arg = process.argv[spawnedAcenoArgv.length];
 
-            spawnedTifumArgv.push(arg);
+            spawnedAcenoArgv.push(arg);
 
             /** Check if the call was either "ts-node aceno.ts", "aceno", or "yarn aceno"
              * and push all arguments before that to use */
             if (arg.includes(ACENO) && !arg.includes("ts-node") && !arg.includes("node")) {
-                foundTifumFileEnd = true;
+                foundAcenoFileEnd = true;
             }
         }
 
         const parsedArgv = [
-            ...spawnedTifumArgv,
+            ...spawnedAcenoArgv,
             ...scriptArgv.filter(
                 (scriptArg) =>
                     scriptArg !== ACENO &&
@@ -44,7 +66,11 @@ export async function spawnScript(script: string, options: SpawnOptions = {}) {
         ];
 
         if (options.cwd) {
-            parsedArgv.push("--cwd", path.relative(process.cwd(), path.resolve(process.cwd(), options.cwd)));
+            const relativeCwd = path.relative(process.cwd(), path.resolve(process.cwd(), options.cwd));
+
+            if (relativeCwd) {
+                parsedArgv.push("--cwd", path.relative(process.cwd(), path.resolve(process.cwd(), options.cwd)));
+            }
         }
 
         if (options.inherit) {
@@ -73,16 +99,13 @@ export async function spawnScript(script: string, options: SpawnOptions = {}) {
     } else {
         const parsedArgv = [...scriptArgv];
 
-        if (options.cwd) {
-            parsedArgv.push("--cwd", path.relative(process.cwd(), path.resolve(process.cwd(), options.cwd)));
-        }
-
         const [execaFile, ...execaArgv] = parsedArgv;
 
         await execa(execaFile, execaArgv, {
             stdio: "inherit",
+            shell: true,
             ...options,
-            cwd: process.cwd(),
+            cwd: options.cwd ? path.resolve(process.cwd(), options.cwd) : process.cwd(),
         });
     }
 }

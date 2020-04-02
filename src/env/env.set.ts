@@ -1,6 +1,6 @@
 import path from "path";
 
-import words from "lodash-es/words";
+import words from "lodash/words";
 
 import { Options } from "../options";
 import { AcenoRC } from "../options/options.result";
