@@ -1,7 +1,7 @@
 {
 	"name": "aceno",
 	"description": "Complex state in React made simple 🚀",
-	"version": "0.0.0",
+	"version": "0.0.1-canary.0",
 	"license": "MIT",
 	"author": "Ludvig Aldén <ludvig@tifum.com>",
 	"repository": "ludvigalden/aceno",
@@ -29,7 +29,6 @@
 		"test": "tsdx test --passWithNoTests",
 		"lint": "tsdx lint",
 		"precommit": "lint-staged",
-		"prepublishOnly": "npm run build",
 		"publish-canary": "lerna version prerelease --preid canary --force-publish && release --pre",
 		"publish-stable": "lerna version --force-publish && release && node ./scripts/release-notes.js",
 		"addc": "all-contributors add",
