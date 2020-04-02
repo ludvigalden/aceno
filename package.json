@@ -25,7 +25,7 @@
 		"lol_L": "aceno lol",
 		"xd_L": "aceno run lol_L && aceno xd",
 		"build": "tsc && cp package.json dist/package.json && cp README.md dist/README.md && cp LICENSE dist/LICENSE",
-		"prebuild": "rimraf dist",
+		"prebuild": "rm -rf dist",
 		"test": "tsdx test --passWithNoTests",
 		"lint": "tsdx lint",
 		"precommit": "lint-staged",
